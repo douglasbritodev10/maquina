@@ -15,39 +15,9 @@
             <input type="password" id="password" placeholder="Nova Senha" required>
             <button type="submit" class="btn-primary">Criar Conta</button>
         </form>
-        <p><a href="index.html" style="color: white; font-size: 0.8rem;">Voltar ao Login</a></p>
+        <p><a href="index.html" style="color: white; font-size: 0.8rem; text-decoration: none;">← Voltar ao Login</a></p>
     </div>
 
-    <script type="module">
-        import { auth, db } from "./js/firebase-config.js";
-        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        document.getElementById('cadastroForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('password').value;
-
-            try {
-                // 1. Cria o usuário no Auth
-                const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-                const user = userCredential.user;
-
-                // 2. Salva os detalhes extras no Firestore (Criando a coleção 'usuarios' automaticamente)
-                await setDoc(doc(db, "usuarios", user.uid), {
-                    nome: nome,
-                    email: email,
-                    role: "admin",
-                    criadoEm: new Date()
-                });
-
-                alert("Conta configurada! Bem-vindo, " + nome);
-                window.location.href = "dashboard.html";
-            } catch (error) {
-                alert("Erro: " + error.message);
-            }
-        });
-    </script>
+    <script type="module" src="js/cadastro.js"></script>
 </body>
 </html>
