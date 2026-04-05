@@ -1,14 +1,22 @@
-import { auth } from "./firebase-config.js";
-import { 
-    signInWithEmailAndPassword, 
-    onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { auth, db } from "./firebase-config.js";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const loginForm = document.getElementById('loginForm');
 const errorDiv = document.getElementById('error-message');
 
-onAuthStateChanged(auth, (user) => {
-    if (user) window.location.href = "dashboard.html";
+// Lógica inteligente de redirecionamento
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+        if (userDoc.exists()) {
+            window.location.href = "dashboard.html";
+        } else {
+            // Se logou mas não tem documento no Firestore, é primeiro acesso
+            sessionStorage.setItem('email_pre_cadastro', user.email);
+            window.location.href = "cadastro.html";
+        }
+    }
 });
 
 if (loginForm) {
@@ -18,19 +26,11 @@ if (loginForm) {
         const password = document.getElementById('password').value;
 
         try {
-            // Tenta logar
             await signInWithEmailAndPassword(auth, email, password);
-            window.location.href = "dashboard.html";
-
         } catch (error) {
-            // LÓGICA DE PRIMEIRO ACESSO:
-            // Se o e-mail não existir no Firebase Auth
+            // Se o usuário não existe no Auth, salva o email e manda para o cadastro
             if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                
-                // Salvamos o e-mail temporariamente para o cadastro não precisar pedir de novo
                 sessionStorage.setItem('email_pre_cadastro', email);
-                
-                alert("Primeiro acesso detectado! Vamos configurar seu perfil.");
                 window.location.href = "cadastro.html";
             } else {
                 errorDiv.innerText = "Senha incorreta ou erro de conexão.";
