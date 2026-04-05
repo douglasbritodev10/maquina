@@ -1,14 +1,15 @@
-import { auth } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
     onAuthStateChanged 
-} from "firebase/auth";
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const loginForm = document.getElementById('loginForm');
 const errorDiv = document.getElementById('error-message');
 
-// Se já estiver logado, vai direto para o dashboard
 onAuthStateChanged(auth, (user) => {
     if (user) window.location.href = "dashboard.html";
 });
@@ -20,21 +21,29 @@ if (loginForm) {
         const password = document.getElementById('password').value;
 
         try {
-            // Tenta fazer o login comum
             await signInWithEmailAndPassword(auth, email, password);
-            window.location.href = "dashboard.html";
         } catch (error) {
-            // Lógica de "Primeiro Acesso": Se o usuário não existe, cria a conta
-            if (error.code === 'auth/user-not-found') {
+            // Se o usuário não existir no Auth, vamos criar e salvar no Firestore
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
                 try {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    alert("Primeiro acesso detectado! Conta criada com sucesso.");
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    // Criando o perfil no Firestore automaticamente
+                    await setDoc(doc(db, "usuarios", user.uid), {
+                        email: email,
+                        nome: email.split('@')[0], // Nome provisório vindo do e-mail
+                        nivel: "admin",
+                        criadoEm: new Date()
+                    });
+
+                    alert("Primeiro acesso! Perfil criado no banco de dados.");
                     window.location.href = "dashboard.html";
                 } catch (createError) {
-                    errorDiv.innerText = "Erro ao criar conta: " + createError.message;
+                    errorDiv.innerText = "Erro ao criar: " + createError.message;
                 }
             } else {
-                errorDiv.innerText = "Senha incorreta ou erro de conexão.";
+                errorDiv.innerText = "Erro ao acessar o sistema.";
             }
         }
     });
