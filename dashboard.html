@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Monitoramento</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="user-info" id="userName">Carregando...</div>
+        <h1 class="page-title">Monitoramento de Frota</h1>
+        <button class="btn-sair" id="btnLogout">Sair</button>
+    </header>
+
+    <main style="padding: 40px;">
+        <div id="grid-maquinas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            </div>
+    </main>
+
+    <script type="module" src="dashboard.js"></script>
+</body>
+</html>
