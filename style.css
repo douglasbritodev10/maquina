@@ -1,0 +1,73 @@
+:root {
+    --azul-claro-escuro: #1b4965; /* O azul que você pediu */
+    --azul-gradiente: linear-gradient(135deg, #1b4965 0%, #0d2137 100%);
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--azul-gradiente);
+    height: 100vh;
+    color: white;
+}
+
+/* Layout do Login */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.login-container { width: 350px; }
+
+/* Inputs e Botões */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #62b6cb; /* Um azul mais vivo para destaque */
+    color: #0d2137;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary:hover { background: #bee9e8; }
+
+/* Header do Dashboard */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.user-info { font-weight: 500; font-size: 0.9rem; }
+.page-title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+.btn-sair { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
