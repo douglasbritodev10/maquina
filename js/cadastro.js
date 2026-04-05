@@ -9,14 +9,11 @@ if (cadastroForm) {
     cadastroForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Pega o e-mail que veio da tela de login
         const emailOriginal = sessionStorage.getItem('email_pre_cadastro');
-        
         const nome = document.getElementById('nome').value;
         const senha = document.getElementById('senha').value;
         const confirma = document.getElementById('confirmarSenha').value;
 
-        // 1. Validação básica de segurança
         if (!emailOriginal) {
             msgErro.innerText = "Erro: E-mail não identificado. Volte ao login.";
             return;
@@ -27,17 +24,23 @@ if (cadastroForm) {
             return;
         }
 
-        if (senha.length < 6) {
-            msgErro.innerText = "A senha deve ter no mínimo 6 caracteres.";
-            return;
-        }
-
         try {
-            // 2. Cria o usuário no Firebase Authentication
-            const userCredential = await createUserWithEmailAndPassword(auth, emailOriginal, senha);
-            const user = userCredential.user;
+            let user;
+            try {
+                // Tenta criar o novo usuário
+                const userCredential = await createUserWithEmailAndPassword(auth, emailOriginal, senha);
+                user = userCredential.user;
+            } catch (authError) {
+                // Se o e-mail já existir no Auth, mas você caiu nesta tela, 
+                // usamos o usuário que já está logado no navegador para tentar gravar no Firestore
+                if (authError.code === 'auth/email-already-in-use' && auth.currentUser) {
+                    user = auth.currentUser;
+                } else {
+                    throw authError; // Re-lança se for outro erro
+                }
+            }
 
-            // 3. Cria o documento na coleção 'usuarios' no Firestore
+            // Grava os dados no Firestore (isso criará a coleção 'usuarios' automaticamente)
             await setDoc(doc(db, "usuarios", user.uid), {
                 uid: user.uid,
                 nome: nome,
@@ -47,15 +50,13 @@ if (cadastroForm) {
                 criadoEm: new Date()
             });
 
-            // Limpa o e-mail temporário
             sessionStorage.removeItem('email_pre_cadastro');
-
-            alert("Perfil criado com sucesso! Bem-vindo, " + nome);
+            alert("Perfil configurado com sucesso!");
             window.location.href = "dashboard.html";
 
         } catch (error) {
             console.error(error);
-            msgErro.innerText = "Erro ao cadastrar: " + error.message;
+            msgErro.innerText = "Erro: " + error.message;
         }
     });
 }
