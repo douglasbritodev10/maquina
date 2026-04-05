@@ -1,5 +1,5 @@
 :root {
-    --azul-claro-escuro: #1b4965; /* O azul que você pediu */
+    --azul-claro-escuro: #1b4965;
     --azul-gradiente: linear-gradient(135deg, #1b4965 0%, #0d2137 100%);
     --glass: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);
@@ -13,7 +13,7 @@ body {
     color: white;
 }
 
-/* Layout do Login */
+/* Layout do Login e Cadastro */
 .login-page {
     display: flex;
     justify-content: center;
@@ -42,6 +42,7 @@ input {
     border: 1px solid var(--glass-border);
     background: rgba(255, 255, 255, 0.05);
     color: white;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura */
 }
 
 .btn-primary {
@@ -49,7 +50,7 @@ input {
     padding: 12px;
     border: none;
     border-radius: 8px;
-    background: #62b6cb; /* Um azul mais vivo para destaque */
+    background: #62b6cb;
     color: #0d2137;
     font-weight: bold;
     cursor: pointer;
@@ -70,4 +71,25 @@ header {
 
 .user-info { font-weight: 500; font-size: 0.9rem; }
 .page-title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
-.btn-sair { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+.btn-sair { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 5px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+.btn-sair:hover { background: #ff4d4d; color: white; }
+
+/* Estilos dos Cartões das Máquinas (Dashboard) */
+.machine-card { padding: 20px; position: relative; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.machine-id { font-weight: bold; font-size: 1.1rem; color: #62b6cb; }
+
+.battery-section { 
+    background: rgba(255,255,255,0.1); 
+    height: 25px; 
+    border-radius: 5px; 
+    position: relative; 
+    overflow: hidden; 
+}
+.battery-level { height: 100%; transition: width 0.5s ease-in-out; }
+.battery-text { position: absolute; width: 100%; text-align: center; top: 3px; font-weight: bold; font-size: 0.8rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+
+.status-badge { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.online { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+.offline { background: #95a5a6; }
+.card-footer { margin-top: 10px; opacity: 0.6; font-size: 0.7rem; }
