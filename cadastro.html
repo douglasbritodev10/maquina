@@ -2,20 +2,31 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Primeiro Acesso | Sistema MS</title>
+    <title>Configurar Perfil | Sistema MS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="login-page">
     <div class="glass-card login-container">
-        <h2>Primeiro Acesso</h2>
-        <p>Crie sua conta de administrador</p>
+        <h2>Finalizar Cadastro</h2>
+        <p>Defina seus dados de acesso</p>
+        
         <form id="cadastroForm">
-            <input type="text" id="nome" placeholder="Seu Nome" required>
-            <input type="email" id="email" placeholder="E-mail" required>
-            <input type="password" id="password" placeholder="Nova Senha" required>
-            <button type="submit" class="btn-primary">Criar Conta</button>
+            <div class="input-group">
+                <label>Nome Completo / Usuário</label>
+                <input type="text" id="nome" placeholder="Ex: Douglas Brito" required>
+            </div>
+            <div class="input-group">
+                <label>Nova Senha</label>
+                <input type="password" id="senha" placeholder="******" required>
+            </div>
+            <div class="input-group">
+                <label>Confirmar Nova Senha</label>
+                <input type="password" id="confirmarSenha" placeholder="******" required>
+            </div>
+            <button type="submit" class="btn-primary" style="margin-top: 20px;">Ativar e Acessar</button>
         </form>
-        <p><a href="index.html" style="color: white; font-size: 0.8rem; text-decoration: none;">← Voltar ao Login</a></p>
+        
+        <div id="msg-erro" style="color: #ff4d4d; margin-top: 15px; font-size: 0.8rem;"></div>
     </div>
 
     <script type="module" src="js/cadastro.js"></script>
